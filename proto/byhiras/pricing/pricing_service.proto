@@ -8,22 +8,39 @@ service PricingService {
   rpc Patch (PricingRequest) returns (PricingResponse) {}
 }
 message PricingRequest {
-
   oneof rates {
     PerformanceBasedRate performance_fee = 1;
     TieredRate tiered_rate = 2;
-    VolumeRate volume_rate = 3;
+    ScaledRate scaled_rate = 3;
   }
 }
 
-message PricingResponse {}
-message PerformanceBasedRate {}
+message PricingResponse {
+  double fee = 1;
+}
+
+message PerformanceBasedRate {
+  double reference_start = 1;
+  double reference_close = 2;
+  double hurdle_percentage = 3;
+  double fund_start_value = 4;
+  double fund_close_value = 5;
+  double performance_rate_percentage = 6;
+}
+
 message TieredRate {
   repeated Tier tiers = 1;
 }
-message VolumeRate {
-  repeated Tier tiers = 1;
+message ScaledRate {
+  repeated ScaleBoundary boundaries = 1;
 }
+
+
+message ScaleBoundary {
+  double lower_bound = 1;
+  Rate rate = 2;
+}
+
 message Tier {
   optional double lower_bound = 1;
   optional double high_bound = 2;
