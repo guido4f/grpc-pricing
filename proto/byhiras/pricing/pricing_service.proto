@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package byhiras.pricing;
+
+option go_package = "github.com/guido4f/grpc-pricing/gen/pb";
+
+service PricingService {
+    rpc Patch (PricingRequest) returns (PricingResponse) {}
+}
+message PricingRequest {
+
+    oneof rates {
+        PerformanceBasedRate performance_fee = 1;
+        TieredRate tiered_rate = 2;
+    }
+}
+
+message PricingResponse {}
+message PerformanceBasedRate {}
+message TieredRate {
+    repeated Tier tiers = 1;
+}
+message Tier {
+    optional double lower_bound = 1;
+    optional double high_bound = 2;
+    Rate rate = 3;
+}
+
+message Rate {
+    oneof rate {
+        double basis = 1;
+        double percentage = 2;
+    }
+}
