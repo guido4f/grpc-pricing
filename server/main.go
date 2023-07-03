@@ -1,38 +1,28 @@
 package main
 
 import (
-	"fmt"
+	"../config"
+	"./service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 )
 
+var (
+	ctx context.Context
+
+	// ? Create the Post Variables
+	postService services.PatchService
+)
+
 func init() {
-	config, err := config.LoadConfig(".")
-	if err != nil {
-		log.Printf("Could not load environment variables", err)
-	}
+	//config, err := config.LoadConfig(".")
+	//if err != nil {
+	//	log.Printf("Could not load environment variables", err)
+	//}
 
-	ctx = context.TODO()
-
-	// Connect to MongoDB
-	mongoconn := options.Client().ApplyURI(config.DBUri)
-	mongoclient, err := mongo.Connect(ctx, mongoconn)
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err := mongoclient.Ping(ctx, readpref.Primary()); err != nil {
-		panic(err)
-	}
-
-	fmt.Println("MongoDB successfully connected...")
-
-	// ? Instantiate the Constructors
-	postCollection = mongoclient.Database("golang_mongodb").Collection("posts")
-	postService = services.NewPostService(postCollection, ctx)
+	postService = service.NewPricingService(ctx)
 
 }
 
@@ -42,8 +32,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not load config", err)
 	}
-
-	defer mongoclient.Disconnect(ctx)
 
 	startGrpcServer(config)
 }
