@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package byhiras.pricing;
+
+option go_package = "byhiras.pricing";
+
+service PricingService {
+  rpc Patch (PricingRequest) returns (PricingResponse) {}
+}
+message PricingRequest {
+
+  oneof rates {
+    PerformanceBasedRate performance_fee = 1;
+    TieredRate tiered_rate = 2;
+    VolumeRate volume_rate = 3;
+  }
+}
+
+message PricingResponse {}
+message PerformanceBasedRate {}
+message TieredRate {
+  repeated Tier tiers = 1;
+}
+message VolumeRate {
+  repeated Tier tiers = 1;
+}
+message Tier {
+  optional double lower_bound = 1;
+  optional double high_bound = 2;
+  Rate rate = 3;
+}
+
+message Rate {
+  oneof rate {
+    double basis = 1;
+    double percentage = 2;
+  }
+}
