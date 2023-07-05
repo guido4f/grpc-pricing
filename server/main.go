@@ -1,8 +1,10 @@
 package main
 
 import (
-	"../config"
-	"./service"
+	"context"
+	"github.com/guido4f/grpc-pricing/gen/byhiras.pricing"
+	"github.com/guido4f/grpc-pricing/server/config"
+	"github.com/guido4f/grpc-pricing/server/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -10,20 +12,12 @@ import (
 )
 
 var (
-	ctx context.Context
-
-	// ? Create the Post Variables
-	postService services.PatchService
+	ctx         context.Context
+	postService byhiras_pricing.PricingServiceServer
 )
 
 func init() {
-	//config, err := config.LoadConfig(".")
-	//if err != nil {
-	//	log.Printf("Could not load environment variables", err)
-	//}
-
 	postService = service.NewPricingService(ctx)
-
 }
 
 func main() {
@@ -38,14 +32,12 @@ func main() {
 
 func startGrpcServer(config config.Config) {
 
-	postServer, err := gapi.NewGrpcPostServer(postCollection, postService)
-	if err != nil {
-		log.Fatal("cannot create gapi postServer: ", err)
-	}
+	postServer := service.NewPricingService(ctx)
+
 	grpcServer := grpc.NewServer()
 
 	// ? Register the Post gRPC service
-	pb.RegisterPatchServiceServer(grpcServer, postServer)
+	byhiras_pricing.RegisterPricingServiceServer(grpcServer, postServer)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", config.GrpcServerAddress)

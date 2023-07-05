@@ -1,8 +1,8 @@
 package service
 
 import (
-	byhiras_pricing "../../gen/byhiras.pricing"
 	"context"
+	byhiras_pricing "github.com/guido4f/grpc-pricing/gen/byhiras.pricing"
 )
 
 type PricingServiceImpl struct {
