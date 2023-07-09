@@ -29,39 +29,23 @@ func TestTieredFees_calculateTierFee(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   PricedTieredFees
+		want   CalculatedTieredFees
 	}{
 		{
 			"Single Tiers",
 			fields{[]TierFee{fee1}},
 			args{2000.0},
-			PricedTieredFees{[]PricedTierFee{{
-				TierFee{1300.0,
-					percentageFee{10}},
-				1300,
-				130.0,
-			}},
+			CalculatedTieredFees{[]CalculatedTierFee{*buildPctCalculaterTier(1300.0, 10.0, 1300.0, 130.0)},
 				130.0},
 		},
 		{
 			"Test Based Descending supplied Tiers",
 			fields{[]TierFee{fee1, fee2, fee3}},
-			args{2000.0}, PricedTieredFees{[]PricedTierFee{{
-				TierFee{100.0,
-					percentageFee{20}},
-				100,
-				20,
-			}, {
-				TierFee{500.0,
-					percentageFee{5}},
-				400,
-				20,
-			}, {
-				TierFee{1300.0,
-					percentageFee{10}},
-				800,
-				80,
-			}},
+			args{2000.0}, CalculatedTieredFees{[]CalculatedTierFee{
+				*buildPctCalculaterTier(100.0, 20.0, 100.0, 20.0),
+				*buildPctCalculaterTier(500.0, 5, 400.0, 20.0),
+				*buildPctCalculaterTier(1300.0, 10.0, 800.0, 80.0),
+			},
 				80 + 20 + 20},
 		}}
 
@@ -75,4 +59,12 @@ func TestTieredFees_calculateTierFee(t *testing.T) {
 			}
 		})
 	}
+}
+
+func buildPctCalculaterTier(bound float64, fee float64, tier float64, feeAmt float64) *CalculatedTierFee {
+	return NewCalculatedTierFee(
+		*NewTierFee(bound, *newPercentageFee(fee)),
+		tier,
+		feeAmt,
+	)
 }

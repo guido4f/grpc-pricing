@@ -12,6 +12,10 @@ type percentageFee struct {
 	PercentageFee float64
 }
 
+func newPercentageFee(percentage float64) *percentageFee {
+	return &percentageFee{percentage}
+}
+
 type highWaterMarkFee struct {
 	LowerBound float64
 	Rate       FeeRate

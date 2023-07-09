@@ -30,7 +30,7 @@ func main() {
 	startGrpcServer(config)
 }
 
-func startGrpcServer(config config.Config) {
+func startGrpcServer(appCfg config.Config) {
 
 	postServer := service.NewPricingService(ctx)
 
@@ -40,7 +40,7 @@ func startGrpcServer(config config.Config) {
 	byhiras_pricing.RegisterPricingServiceServer(grpcServer, postServer)
 	reflection.Register(grpcServer)
 
-	listener, err := net.Listen("tcp", config.Grpc.Host)
+	listener, err := net.Listen("tcp", appCfg.Grpc.Host+":"+appCfg.Grpc.Port)
 	if err != nil {
 		log.Fatal("cannot create gapi server: ", err)
 	}

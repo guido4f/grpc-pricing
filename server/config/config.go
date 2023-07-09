@@ -14,6 +14,7 @@ type Grpc struct {
 
 func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
+	viper.SetDefault("Grpc.Port", 8080)
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("app")
 	viper.AddConfigPath("/app/config/") // path to look for the config file in
