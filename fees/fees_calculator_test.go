@@ -14,15 +14,15 @@ func TestTieredFees_calculateTierFee(t *testing.T) {
 	}
 	fee1 := TierFee{
 		1300,
-		percentageFee{10},
+		PercentageFee{10},
 	}
 	fee2 := TierFee{
 		500,
-		percentageFee{5},
+		PercentageFee{5},
 	}
 	fee3 := TierFee{
 		100,
-		percentageFee{20},
+		PercentageFee{20},
 	}
 
 	tests := []struct {
@@ -63,7 +63,7 @@ func TestTieredFees_calculateTierFee(t *testing.T) {
 
 func buildPctCalculaterTier(bound float64, fee float64, tier float64, feeAmt float64) *CalculatedTierFee {
 	return NewCalculatedTierFee(
-		*NewTierFee(bound, *newPercentageFee(fee)),
+		*NewTierFee(bound, *NewPercentageFee(fee)),
 		tier,
 		feeAmt,
 	)

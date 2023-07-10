@@ -1,4 +1,4 @@
-module PricingService
+module FeeCalculatorService
 
 go 1.20
 

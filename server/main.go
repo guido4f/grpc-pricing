@@ -1,9 +1,9 @@
 package main
 
 import (
-	"PricingService/gen/byhiras.pricing"
-	"PricingService/server/config"
-	"PricingService/server/service"
+	proto "FeeCalculatorService/gen/guido4f.fee"
+	"FeeCalculatorService/server/config"
+	"FeeCalculatorService/server/service"
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -13,7 +13,7 @@ import (
 
 var (
 	ctx         context.Context
-	postService byhiras_pricing.PricingServiceServer
+	postService proto.FeeCalculatorServiceServer
 )
 
 func init() {
@@ -21,13 +21,13 @@ func init() {
 }
 
 func main() {
-	config, err := config.LoadConfig(".")
+	cfg, err := config.LoadConfig(".")
 
 	if err != nil {
-		log.Fatal("Could not load config", err)
+		log.Fatal("Could not load cfg", err)
 	}
 
-	startGrpcServer(config)
+	startGrpcServer(cfg)
 }
 
 func startGrpcServer(appCfg config.Config) {
@@ -37,7 +37,7 @@ func startGrpcServer(appCfg config.Config) {
 	grpcServer := grpc.NewServer()
 
 	// ? Register the Post gRPC service
-	byhiras_pricing.RegisterPricingServiceServer(grpcServer, postServer)
+	proto.RegisterFeeCalculatorServiceServer(grpcServer, postServer)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", appCfg.Grpc.Host+":"+appCfg.Grpc.Port)

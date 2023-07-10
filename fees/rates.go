@@ -4,16 +4,20 @@ type FeeRate interface {
 	calculateFee(marketValue float64) float64
 }
 
-type basisPointFee struct {
+type BasisPointFee struct {
 	BasisPointRate float64
 }
 
-type percentageFee struct {
+func NewBasisPointFee(basisPointRate float64) *BasisPointFee {
+	return &BasisPointFee{BasisPointRate: basisPointRate}
+}
+
+type PercentageFee struct {
 	PercentageFee float64
 }
 
-func newPercentageFee(percentage float64) *percentageFee {
-	return &percentageFee{percentage}
+func NewPercentageFee(percentage float64) *PercentageFee {
+	return &PercentageFee{percentage}
 }
 
 type highWaterMarkFee struct {
@@ -34,9 +38,9 @@ type highWaterMarkedFee struct {
 	Tiers []highWaterMarkFee
 }
 
-func (r percentageFee) calculateFee(v float64) float64 {
+func (r PercentageFee) calculateFee(v float64) float64 {
 	return v * (r.PercentageFee / 100)
 }
-func (r basisPointFee) calculateFee(v float64) float64 {
+func (r BasisPointFee) calculateFee(v float64) float64 {
 	return v * (r.BasisPointRate / 10_000)
 }

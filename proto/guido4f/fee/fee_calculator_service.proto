@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package guido4f.fee;
+
+option go_package = "guido4f.fee";
+
+service FeeCalculatorService {
+  rpc CalculateFee(FeeCalculatorRequest) returns (FeeCalculatorResponse) {}
+}
+message FeeCalculatorRequest {
+  oneof rates {
+    PerformanceBasedRate performance_fee = 1;
+    TieredRates tiered_rate = 2;
+    ScaledRate scaled_rate = 3;
+  }
+}
+
+message FeeCalculatorResponse {
+  double fee = 1;
+}
+
+message PerformanceBasedRate {
+  double reference_start = 1;
+  double reference_close = 2;
+  double hurdle_percentage = 3;
+  double fund_start_value = 4;
+  double fund_close_value = 5;
+  double performance_rate_percentage = 6;
+}
+
+message TieredRates {
+  repeated Tier tiers = 1;
+}
+message ScaledRate {
+  repeated ScaleBoundary boundaries = 1;
+}
+
+
+message ScaleBoundary {
+  double lower_bound = 1;
+  Rate rate = 2;
+}
+
+message Tier {
+  optional double high_bound =1;
+  Rate rate = 2;
+}
+
+message Rate {
+  oneof rate {
+    double basis = 1;
+    double percentage = 2;
+  }
+}
