@@ -10,7 +10,7 @@ service PricingService {
 message PricingRequest {
   oneof rates {
     PerformanceBasedRate performance_fee = 1;
-    TieredRate tiered_rate = 2;
+    TieredRates tiered_rate = 2;
     ScaledRate scaled_rate = 3;
   }
 }
@@ -28,7 +28,7 @@ message PerformanceBasedRate {
   double performance_rate_percentage = 6;
 }
 
-message TieredRate {
+message TieredRates {
   repeated Tier tiers = 1;
 }
 message ScaledRate {
@@ -42,9 +42,8 @@ message ScaleBoundary {
 }
 
 message Tier {
-  optional double lower_bound = 1;
-  optional double high_bound = 2;
-  Rate rate = 3;
+  optional double high_bound =1;
+  Rate rate = 2;
 }
 
 message Rate {

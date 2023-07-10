@@ -1,12 +1,12 @@
 package fees
 
-type SimpleFeePricingRequest struct {
+type SimpleFee struct {
 	BaseMarketValue float64
 	Rate            FeeRate
 }
 
-type SimpleFeePricingResponse struct {
-	SimpleFeePricingRequest
+type CalculatedSimpleFee struct {
+	SimpleFee
 	calculatedFee float64
 }
 

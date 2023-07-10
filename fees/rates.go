@@ -8,11 +8,15 @@ type basisPointFee struct {
 	BasisPointRate float64
 }
 
+func NewBasisPointFee(basisPointRate float64) *basisPointFee {
+	return &basisPointFee{BasisPointRate: basisPointRate}
+}
+
 type percentageFee struct {
 	PercentageFee float64
 }
 
-func newPercentageFee(percentage float64) *percentageFee {
+func NewPercentageFee(percentage float64) *percentageFee {
 	return &percentageFee{percentage}
 }
 

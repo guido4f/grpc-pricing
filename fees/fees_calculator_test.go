@@ -63,7 +63,7 @@ func TestTieredFees_calculateTierFee(t *testing.T) {
 
 func buildPctCalculaterTier(bound float64, fee float64, tier float64, feeAmt float64) *CalculatedTierFee {
 	return NewCalculatedTierFee(
-		*NewTierFee(bound, *newPercentageFee(fee)),
+		*NewTierFee(bound, *NewPercentageFee(fee)),
 		tier,
 		feeAmt,
 	)
